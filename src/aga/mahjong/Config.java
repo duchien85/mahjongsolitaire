@@ -1,45 +1,46 @@
 ﻿package aga.mahjong;
 
-import java.io.File;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 
 public class Config {
-	private static Config _instance;
+	private static final String IS_RANDOM = "IsRandom";
+	private static final String LAYOUT = "Layout";
+	
+	private static Config instance;
 
 	public static Config getInstance() {
-		if (_instance == null) {
-			_instance = new Config();
-			Load();
+		if (instance == null) {
+			instance = new Config();
 		}
-		return _instance;
+		return instance;
 	}
-
-	private boolean _isRandom = true;
-
+	
+	private Config() {
+	}
+	
 	public boolean getIsRandom() {
-		return _isRandom;
+		return getPrefs().getBoolean(IS_RANDOM, false);
 	}
 
 	public void setIsRandom(boolean value) {
-		_isRandom = value;
+		Editor editor = getPrefs().edit();
+		editor.putBoolean(IS_RANDOM, value);
+		editor.commit();
 	}
 
-	private String _layout = "Turtle";
-
 	public String getLayout() {
-		return _layout;
+		return getPrefs().getString(LAYOUT, "turtle");
 	}
 
 	public void setLayout(String value) {
-		_layout = value;
+		Editor editor = getPrefs().edit();
+		editor.putString(LAYOUT, value);
+		editor.commit();
 	}
-
-	private static String getFileName() {
-		return ".config";
-	}
-
-	public static void Save() {
-	}
-
-	public static void Load() {
+	
+	private SharedPreferences getPrefs() {
+		return Main.getInstance().getPreferences(Context.MODE_PRIVATE);
 	}
 }

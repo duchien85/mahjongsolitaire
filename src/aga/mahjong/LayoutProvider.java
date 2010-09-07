@@ -1,62 +1,44 @@
 ﻿package aga.mahjong;
 
-import PocketMahjong.Core.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
 
-public class LayoutProvider
-{
-	private static java.util.HashMap<String, Layout> _layouts;
-	public static Iterable<Layout> getLayouts()
-	{
-		if (_layouts == null)
-		{
-			Load();
-		}
-//C# TO JAVA CONVERTER TODO TASK: There is no Java equivalent to LINQ queries:
-//C# TO JAVA CONVERTER TODO TASK: Lambda expressions and anonymous methods are not converted by C# to Java Converter:
-		return _layouts.values().OrderBy(p => p.getName()).toArray();
+import aga.mahjong.core.Layout;
+import android.content.res.AssetManager;
+
+public class LayoutProvider {
+	private static final String dir = "/layouts";
+
+	private static ArrayList<Layout> layouts;
+
+	public static Collection<Layout> getLayouts() {
+		if (layouts == null)
+			load(Main.getInstance().getAssets());
+		return layouts;
 	}
 
-	private static void Load()
-	{
-		System.Diagnostics.Stopwatch w = new System.Diagnostics.Stopwatch();
-		w.Start();
-
-		String prefix = "PocketMahjong.Layouts.";
-		_layouts = new java.util.HashMap<String, Layout>();
-		Assembly asm = Assembly.GetExecutingAssembly();
-		for (String name : asm.GetManifestResourceNames())
-		{
-			if (name.startsWith(prefix))
-			{
-//C# TO JAVA CONVERTER TODO TASK: There is no equivalent to implicit typing in Java:
-				var data = asm.GetManifestResourceStream(name);
-//C# TO JAVA CONVERTER TODO TASK: There is no equivalent to implicit typing in Java:
-				var lay = Layout.Load(data);
-				lay.setName(name.replace(prefix, "").Replace(".bin",""));
-				_layouts.put(lay.getName().toLowerCase(), lay);
+	private static void load(AssetManager am) {
+		try {
+			layouts = new ArrayList<Layout>();
+			for (String str : am.list(dir)) {
+				InputStream in = am.open(dir + "/" + str);
+				Layout layout = Layout.load(in);
+				layout.setName(str.replace(".bin", ""));
+				layouts.add(layout);
 			}
+		} catch (IOException ex) {
+			throw new RuntimeException(ex);
 		}
-
-		w.Stop();
-//C# TO JAVA CONVERTER TODO TASK: There is no equivalent to implicit typing in Java:
-		var t = w.ElapsedMilliseconds;
 	}
 
-	public static Layout GetLayout(String name)
-	{
-		if (_layouts == null)
-		{
-			Load();
-		}
-
+	public static Layout GetLayout(String name) {
 		name = name.toLowerCase();
-		if (_layouts.containsKey(name))
-		{
-			return _layouts.get(name);
+		for (Layout l : getLayouts()) {
+			if (l.getName().equals(name))
+				return l;
 		}
-		else
-		{
-			throw new ArgumentOutOfRangeException("name");
-		}
+		throw new RuntimeException("Unknow layout: " + name);
 	}
 }
