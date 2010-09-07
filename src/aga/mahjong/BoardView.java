@@ -2,8 +2,6 @@
 
 import java.util.ArrayList;
 
-import com.kmagic.solitaire.Drawable;
-
 import aga.mahjong.core.*;
 import android.content.Context;
 import android.content.res.Resources;
@@ -12,6 +10,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 
 public class BoardView extends View {
@@ -110,7 +109,7 @@ public class BoardView extends View {
 		_tile1_bottom = Properties.Resources.Tile1_3;
 		_tile2_top = Properties.Resources.Tile2_1;
 		_tile2_bottom = Properties.Resources.Tile2_3;
-		for (Tile t : TileSet.GetAllTiles()) {
+		for (Tile t : TileSet.getAllTiles()) {
 			AddTile(t, _tiles, Properties.Resources.Tile1_2);
 			AddTile(t, _tilesSelected, Properties.Resources.Tile2_2);
 		}
