@@ -23,7 +23,7 @@ public class BoardController
 		_undoStack = new java.util.Stack<Cell>();
 	}
 
-	public void ClickTile(Position position)
+	/*public void ClickTile(Position position)
 	{
 		if (_hintMode)
 		{
@@ -98,7 +98,7 @@ public class BoardController
 	public void StartNewGame()
 	{
 //C# TO JAVA CONVERTER TODO TASK: There is no equivalent to implicit typing in Java:
-		var lay = LayoutProvider.GetLayout(Config.Instance.Layout);
+		var lay = LayoutProvider.getLayout(Config.Instance.Layout);
 		IArrangeStrategy ar;
 		if (Config.Instance.IsRandom)
 		{
@@ -129,5 +129,5 @@ public class BoardController
 			getBoard().Selection.Add(pair.Position2);
 		}
 		_view.UpdateView();
-	}
+	}*/
 }
