@@ -9,7 +9,7 @@ import aga.mahjong.core.Layout;
 import android.content.res.AssetManager;
 
 public class LayoutProvider {
-	private static final String dir = "/layouts";
+	private static final String dir = "layouts";
 
 	private static ArrayList<Layout> layouts;
 
