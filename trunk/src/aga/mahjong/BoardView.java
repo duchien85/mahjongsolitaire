@@ -56,6 +56,8 @@ public class BoardView extends View {
 	private static final int CellHeight = 45;
 	private static final int TileWidth = 36;
 	private static final int TileHeight = 49;
+	private static final int FaceWidth = 24;
+	private static final int FaceHeight = 38;
 	private static final int StatusBarHeight = 40;
 
 	private java.util.ArrayList<PositionInfo> _bounds = new java.util.ArrayList<PositionInfo>();
@@ -129,7 +131,8 @@ public class BoardView extends View {
 		
 		for (Tile t : TileSet.getAllTiles()) {
 			try {
-				Field field = R.drawable.class.getField(String.format("%1$s%2$s.png", t.getKind(), t.getNumber()));
+				String name = String.format("%1$s%2$s", t.getKind(), t.getNumber());
+				Field field = R.drawable.class.getField(name.toLowerCase());
 				Drawable face = r.getDrawable(field.getInt(t));
 				AddTile(t, _tiles, r.getDrawable(R.drawable.tile1_2), face);
 				AddTile(t, _tilesSelected, r.getDrawable(R.drawable.tile2_2), face);
@@ -152,9 +155,8 @@ public class BoardView extends View {
 			Canvas gr = new Canvas(bmp);
 			tile.draw(gr);
 			
-			Rect fr = face.getBounds();
-			face.setBounds((bmp.getWidth() - fr.width()) / 2 + 2, 
-					(bmp.getHeight() - fr.height()) / 2, fr.width(), fr.height());
+			face.setBounds((bmp.getWidth() - FaceWidth) / 2 + 2, 
+					(bmp.getHeight() - FaceHeight) / 2, FaceWidth, FaceHeight);
 			face.draw(gr);
 			
 			collection.put(t, bmp);
@@ -198,17 +200,16 @@ public class BoardView extends View {
 			int x = sx + pos.getColumn() * CellWidth / 2 + pos.getLayer() * 4;
 			int y = sy + pos.getRow() * CellHeight / 2 - pos.getLayer() * 4;
 
-			drawDrawable(top, x, y);
+			drawDrawable(top, x, y, 36, 3);
 			mBoardCanvas.drawBitmap(face, x, y + top.getBounds().height(), mSuitPaint);
-			drawDrawable(bottom, x, y + top.getBounds().height() + face.getHeight());
+			drawDrawable(bottom, x, y + 3 + FaceHeight, 36, 3);
 
 			_bounds.add(new PositionInfo(cell.getPosition(), new Rect(x, y,	TileWidth, TileHeight)));
 		}
 	}
 	
-	private void drawDrawable(Drawable d, int x, int y) {
-		Rect r = d.getBounds();
-		d.setBounds(x, y, r.width(), r.height());
+	private void drawDrawable(Drawable d, int x, int y, int w, int h) {
+		d.setBounds(x, y, w, h);
 		d.draw(mBoardCanvas);
 	}
 

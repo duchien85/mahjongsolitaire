@@ -23,8 +23,11 @@ public class Main extends Activity {
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-		setContentView(R.layout.main);
-		BoardView view = (BoardView) findViewById(R.id.boardView);
+		//setContentView(R.layout.main);
+		//BoardView view = (BoardView) findViewById(R.id.boardView);
+		
+		BoardView view = new BoardView(this);
+		setContentView(view);
 		
 		Board b = new Board(LayoutProvider.getLayout("turtle"), new RandomArrange());
 		view.setBoard(b);
