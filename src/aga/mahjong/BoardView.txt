@@ -1,0 +1,41 @@
+﻿package aga.mahjong;
+
+public class BoardView
+{
+	/** 
+	 Required designer variable.
+	 
+	*/
+	private System.ComponentModel.IContainer components = null;
+
+	/** 
+	 Clean up any resources being used.
+	 
+	 @param disposing true if managed resources should be disposed; otherwise, false.
+	*/
+	@Override
+	protected void dispose(boolean disposing)
+	{
+		if (disposing && (components != null))
+		{
+			components.dispose();
+		}
+		super.dispose(disposing);
+	}
+
+//C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+		///#region Component Designer generated code
+
+	/** 
+	 Required method for Designer support - do not modify 
+	 the contents of this method with the code editor.
+	 
+	*/
+	private void InitializeComponent()
+	{
+		components = new System.ComponentModel.Container();
+	}
+
+//C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+		///#endregion
+}
