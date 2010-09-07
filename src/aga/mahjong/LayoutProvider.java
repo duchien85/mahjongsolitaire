@@ -33,7 +33,7 @@ public class LayoutProvider {
 		}
 	}
 
-	public static Layout GetLayout(String name) {
+	public static Layout getLayout(String name) {
 		name = name.toLowerCase();
 		for (Layout l : getLayouts()) {
 			if (l.getName().equals(name))
