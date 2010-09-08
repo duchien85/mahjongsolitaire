@@ -31,13 +31,18 @@ public class Main extends Activity {
 		super.onCreate(savedInstanceState);
 		instance = this;
 
-		// Force landscape and no title for extra room
 		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
-		boardView = new BoardView(this);
-		boardView.getController().startNewGame();
-		setContentView(boardView);
+		//boardView = new BoardView(this);
+		//boardView.getController().startNewGame();
+		//setContentView(boardView);
+		
+        //setContentView(R.layout.main);
+        //boardView = (BoardView)findViewById(R.id.boardView);
+		//boardView.getController().startNewGame();
+		
+		new OptionsController(this).show();
 	}
 
 	@Override

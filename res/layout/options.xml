@@ -42,7 +42,15 @@
       android:id="@+id/list"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
-    />
+    >
+    </ListView>
+    
+	    <TextView
+	      android:id="@+id/list_item"
+	      android:layout_width="fill_parent"
+	      android:layout_height="wrap_content"
+	      android:text="Arrangement:"
+	    />
 	
     <LinearLayout
       android:orientation="horizontal"

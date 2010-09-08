@@ -27,15 +27,16 @@ public class OptionsController {
 			((RadioButton) main.findViewById(R.id.solvable)).setChecked(true);
 
 		ListView list = (ListView) main.findViewById(R.id.list);
-		String[] names = LayoutProvider.getLayoutNames();
-		String name = Config.getInstance().getLayout();
-		list.setAdapter(new ArrayAdapter<String>(list.getContext(), 0, 0, names));
+		Object[] layouts = LayoutProvider.getLayouts().toArray();
+		list.setAdapter(new ArrayAdapter<Object>(view.getContext(), R.id.list_item, layouts));
+		
+		/*String name = Config.getInstance().getLayout();
 		for(int i = 0; i < names.length; i++) {
 			if (names[i].equals(name)) {
 				list.setSelection(i);
 				break;
 			}
-		}
+		}*/
 		
 		final Button ok = (Button) main.findViewById(R.id.button_accept);
 		ok.setOnClickListener(new View.OnClickListener() {
@@ -71,7 +72,7 @@ public class OptionsController {
 		Config.getInstance().setIsRandom(rb.isChecked());
 		
 		ListView list = (ListView) main.findViewById(R.id.list);
-		Config.getInstance().setLayout((String)list.getSelectedItem());
+		Config.getInstance().setLayout(list.getSelectedItem().toString());
 		
 		main.setContentView(main.getBoardView());
 	}
