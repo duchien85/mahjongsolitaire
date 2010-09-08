@@ -20,7 +20,7 @@ public class OptionsActivity extends Activity {
 		view.setFocusable(true);
 		view.setFocusableInTouchMode(true);
 
-		boolean random = Config.getInstance().isRandom();
+		boolean random = false; // Config.getInstance().isRandom();
 		if (random)
 			((RadioButton)findViewById(R.id.random)).setChecked(true);
 		else
@@ -29,14 +29,14 @@ public class OptionsActivity extends Activity {
 		final Button change = (Button)findViewById(R.id.change_layout);
 		change.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				Intent intent = new Intent("LIST");
-				intent.setClassName("aga.mahjong", ListActivity.class.getSimpleName());
+				Intent intent = new Intent(Intent.ACTION_EDIT);
+				intent.setClassName("aga.mahjong", LayoutListActivity.class.getSimpleName());
 				startActivity(intent);
 			}
 		});
 
 		final TextView layout = (TextView)findViewById(R.id.layout_value);
-		layout.setText(Config.getInstance().getLayout());
+		//layout.setText(Config.getInstance().getLayout());
 		
 		final Button ok = (Button)findViewById(R.id.button_accept);
 		ok.setOnClickListener(new View.OnClickListener() {
@@ -69,7 +69,7 @@ public class OptionsActivity extends Activity {
 
 	private void accept() {
 		RadioButton rb = (RadioButton)findViewById(R.id.random);
-		Config.getInstance().setIsRandom(rb.isChecked());
+		//Config.getInstance().setIsRandom(rb.isChecked());
 		
 		//ListView list = (ListView) main.findViewById(R.id.list);
 		//Config.getInstance().setLayout(list.getSelectedItem().toString());
