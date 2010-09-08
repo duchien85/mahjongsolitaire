@@ -4,7 +4,7 @@ import android.app.ListActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 
-public class LayoutList extends ListActivity {
+public class LayoutListActivity extends ListActivity {
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
