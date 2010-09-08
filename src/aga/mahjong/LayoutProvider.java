@@ -15,7 +15,7 @@ public class LayoutProvider {
 
 	public static Collection<Layout> getLayouts() {
 		if (layouts == null)
-			load(Main.getInstance().getAssets());
+			load(MainActivity.getInstance().getAssets());
 		return layouts;
 	}
 

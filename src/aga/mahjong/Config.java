@@ -41,6 +41,6 @@ public class Config {
 	}
 	
 	private SharedPreferences getPrefs() {
-		return Main.getInstance().getPreferences(Context.MODE_PRIVATE);
+		return MainActivity.getInstance().getPreferences(Context.MODE_PRIVATE);
 	}
 }

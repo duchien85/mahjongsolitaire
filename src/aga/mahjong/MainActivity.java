@@ -1,12 +1,13 @@
 package aga.mahjong;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 
-public class Main extends Activity {
+public class MainActivity extends Activity {
 	private static final int MENU_NEW_GAME = 1;
 	private static final int MENU_RESTART = 2;
 	private static final int MENU_OPTIONS = 3;
@@ -15,10 +16,10 @@ public class Main extends Activity {
 	private static final int MENU_HINT = 6;
 	//private static final int MENU_HELP = 7;
 	
-	public static Main instance;
+	public static MainActivity instance;
 	private BoardView boardView;
 	
-	public static Main getInstance() {
+	public static MainActivity getInstance() {
 		return instance;
 	}
 	
@@ -38,11 +39,9 @@ public class Main extends Activity {
 		//boardView.getController().startNewGame();
 		//setContentView(boardView);
 		
-        //setContentView(R.layout.main);
-        //boardView = (BoardView)findViewById(R.id.boardView);
-		//boardView.getController().startNewGame();
-		
-		new OptionsController(this).show();
+        setContentView(R.layout.main);
+        boardView = (BoardView)findViewById(R.id.boardView);
+		boardView.getController().startNewGame();
 	}
 
 	@Override
@@ -74,7 +73,9 @@ public class Main extends Activity {
 			boardView.getController().showHint();
 			break;
 		case MENU_OPTIONS:
-			new OptionsController(this).show();
+			Intent intent = new Intent("OPTIONS");
+			intent.setClassName("aga.mahjong", OptionsActivity.class.getSimpleName());
+			startActivity(intent);
 			break;
 		case MENU_QUIT:
 			finish();
