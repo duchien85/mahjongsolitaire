@@ -1,133 +1,113 @@
 ﻿package aga.mahjong;
 
-import aga.mahjong.core.*;
+import java.util.Stack;
 
-public class BoardController
-{
-	private BoardView _view;
-	private boolean _hintMode;
-	private java.util.Stack<Cell> _undoStack;
+import aga.mahjong.core.Board;
+import aga.mahjong.core.Cell;
+import aga.mahjong.core.IArrangeStrategy;
+import aga.mahjong.core.Layout;
+import aga.mahjong.core.Pair;
+import aga.mahjong.core.Position;
+import aga.mahjong.core.RandomArrange;
+import aga.mahjong.core.Tile;
 
-	private Board getBoard()
-	{
-		return _view.getBoard();
-	}
-	private void setBoard(Board value)
-	{
-		_view.setBoard(value);
-	}
+public class BoardController {
+	private BoardView view;
+	private boolean hintMode;
+	private Stack<Cell> undoStack;
 
-	public BoardController(BoardView view)
-	{
-		_view = view;
-		_undoStack = new java.util.Stack<Cell>();
+	public BoardController(BoardView view) {
+		this.view = view;
+		undoStack = new Stack<Cell>();
 	}
 
-	/*public void ClickTile(Position position)
-	{
-		if (_hintMode)
-		{
-			getBoard().Selection.Clear();
-			_hintMode = false;
+	private Board getBoard() {
+		return view.getBoard();
+	}
+
+	private void setBoard(Board value) {
+		view.setBoard(value);
+	}
+
+	public void clickTile(Position position) {
+		if (hintMode) {
+			getBoard().getSelection().clear();
+			hintMode = false;
 		}
 
-		if (getBoard().Selection.Contains(position) || !getBoard().IsFree(position))
-		{
+		if (getBoard().getSelection().contains(position) || !getBoard().IsFree(position))
 			return;
-		}
 
-		if (getBoard().Selection.size() > 0)
-		{
-			if (getBoard()[getBoard().Selection[0]].Match(getBoard()[position]))
-			{
-				RemovePair(position, getBoard().Selection[0]);
+		if (getBoard().getSelection().size() > 0) {
+			Tile t1 = getBoard().getItem(getBoard().getSelection().get(0));
+			Tile t2 = getBoard().getItem(position);
+			if (Tile.isMatch(t1, t2)) {
+				removePair(position, getBoard().getSelection().get(0));
+			} else {
+				getBoard().getSelection().clear();
+				getBoard().getSelection().add(position);
 			}
-			else
-			{
-				getBoard().Selection.Clear();
-				getBoard().Selection.Add(position);
-			}
+		} else {
+			getBoard().getSelection().add(position);
 		}
-		else
-		{
-			getBoard().Selection.Add(position);
-		}
-		_view.UpdateView();
-		CheckGame();
+		
+		view.update();
+		checkGame();
 	}
 
-	private void RemovePair(Position p1, Position p2)
-	{
-		_undoStack.push(new Cell(p1, getBoard()[p1]));
-		_undoStack.push(new Cell(p2, getBoard()[p2]));
-		getBoard()[p1] = null;
-		getBoard()[p2] = null;
-		getBoard().Selection.Clear();
+	private void removePair(Position p1, Position p2) {
+		undoStack.push(new Cell(p1, getBoard().getItem(p1)));
+		undoStack.push(new Cell(p2, getBoard().getItem(p2)));
+		getBoard().setItem(p1, null);
+		getBoard().setItem(p2, null);
+		getBoard().getSelection().clear();
 	}
 
-	private void CheckGame()
-	{
-		if (getBoard().TilesCount == 0)
-		{
-			JOptionPane.showConfirmDialog(null, "You won!", "Pocket Mahjong", JOptionPane.DEFAULT_OPTION);
-		}
-		else if (getBoard().PayersCount == 0)
-		{
-			JOptionPane.showConfirmDialog(null, "Game over.", "Pocket Mahjong", JOptionPane.DEFAULT_OPTION);
+	private void checkGame() {
+		if (getBoard().getTilesCount() == 0)
+			view.showDialog("You won!");
+		else if (getBoard().getPayersCount() == 0)
+			view.showDialog("Game over.");
+	}
+
+	public void undo() {
+		if (undoStack.size() > 0) {
+			getBoard().getSelection().clear();
+			restoreCell();
+			restoreCell();
+			view.update();
 		}
 	}
 
-	public void Undo()
-	{
-		if (_undoStack.size() > 0)
-		{
-			getBoard().Selection.Clear();
-			RestoreCell();
-			RestoreCell();
-			_view.UpdateView();
-		}
+	private void restoreCell() {
+		Cell c = undoStack.pop();
+		getBoard().setItem(c.getPosition(), c.getTile());
 	}
 
-	private void RestoreCell()
-	{
-//C# TO JAVA CONVERTER TODO TASK: There is no equivalent to implicit typing in Java:
-		var c = _undoStack.pop();
-		getBoard()[c.Position] = c.Tile;
-	}
-
-	public void StartNewGame()
-	{
-//C# TO JAVA CONVERTER TODO TASK: There is no equivalent to implicit typing in Java:
-		var lay = LayoutProvider.getLayout(Config.Instance.Layout);
-		IArrangeStrategy ar;
-		if (Config.Instance.IsRandom)
-		{
+	public void startNewGame() {
+		Layout layout = LayoutProvider.getLayout(Config.getInstance().getLayout());
+		IArrangeStrategy ar = new RandomArrange();
+		/*if (Config.getInstance().getIsRandom()) {
 			ar = new RandomArrange();
-		}
-		else
-		{
-			ar = new SolvableArrange();
-		}
-		setBoard(new Board(lay, ar));
-		_view.UpdateView();
+		} else {
+			ar = new RandomArrange();
+		}*/
+		setBoard(new Board(layout, ar));
+		view.update();
 	}
 
-	public void Restart()
-	{
+	public void restart() {
 		getBoard().Restart();
-		_view.UpdateView();
+		view.update();
 	}
 
-	public void ShowHint()
-	{
-		_hintMode = true;
-		getBoard().Selection.Clear();
-//C# TO JAVA CONVERTER TODO TASK: There is no equivalent to implicit typing in Java:
-		for (var pair : getBoard().GetPairs())
-		{
-			getBoard().Selection.Add(pair.Position1);
-			getBoard().Selection.Add(pair.Position2);
+	public void showHint() {
+		hintMode = true;
+		getBoard().getSelection().clear();
+		for (Pair pair : getBoard().GetPairs()) {
+			getBoard().getSelection().add(pair.getPosition1());
+			getBoard().getSelection().add(pair.getPosition2());
 		}
-		_view.UpdateView();
-	}*/
+		view.update();
+	}
 }

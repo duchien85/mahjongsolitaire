@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/options_view"
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+
+  <LinearLayout
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:text="Arrangement:"
+    />
+
+    <RadioGroup
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal">
+
+      <RadioButton android:id="@+id/random"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Random" />
+
+      <RadioButton android:id="@+id/solvable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Solvable" />
+    </RadioGroup>
+
+    <TextView
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:text="Layout:"
+    />
+    
+    <ListView
+      android:id="@+id/list"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+    />
+	
+    <LinearLayout
+      android:orientation="horizontal"
+      android:layout_width="fill_parent"
+      android:gravity="center"
+      android:layout_height="wrap_content">
+      <Button android:id="@+id/button_accept"
+        android:text="OK"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+      <Button android:id="@+id/button_cancel"
+        android:text="Cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    </LinearLayout>
+  </LinearLayout>
+</ScrollView>
+    
+
