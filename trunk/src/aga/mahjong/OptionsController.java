@@ -1,11 +1,11 @@
 package aga.mahjong;
 
+import android.content.Intent;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 public class OptionsController {
 	private final Main main;
@@ -26,9 +26,20 @@ public class OptionsController {
 		else
 			((RadioButton) main.findViewById(R.id.solvable)).setChecked(true);
 
-		ListView list = (ListView) main.findViewById(R.id.list);
-		Object[] layouts = LayoutProvider.getLayouts().toArray();
-		list.setAdapter(new ArrayAdapter<Object>(view.getContext(), R.id.list_item, layouts));
+		final Button change = (Button) main.findViewById(R.id.change_layout);
+		change.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				LayoutList a = new LayoutList();
+				a.startActivity(new Intent(Intent.ACTION_VIEW));
+			}
+		});
+
+		final TextView layout = (TextView) main.findViewById(R.id.layout_value);
+		layout.setText(Config.getInstance().getLayout());
+		
+		//ListView list = (ListView) main.findViewById(R.id.list);
+		//Object[] layouts = LayoutProvider.getLayouts().toArray();
+		//list.setAdapter(new ArrayAdapter<Object>(view.getContext(), R.id.list_item, layouts));
 		
 		/*String name = Config.getInstance().getLayout();
 		for(int i = 0; i < names.length; i++) {
@@ -71,8 +82,8 @@ public class OptionsController {
 		RadioButton rb = (RadioButton) main.findViewById(R.id.random);
 		Config.getInstance().setIsRandom(rb.isChecked());
 		
-		ListView list = (ListView) main.findViewById(R.id.list);
-		Config.getInstance().setLayout(list.getSelectedItem().toString());
+		//ListView list = (ListView) main.findViewById(R.id.list);
+		//Config.getInstance().setLayout(list.getSelectedItem().toString());
 		
 		main.setContentView(main.getBoardView());
 	}
