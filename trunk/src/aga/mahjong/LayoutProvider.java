@@ -18,14 +18,6 @@ public class LayoutProvider {
 			load(Main.getInstance().getAssets());
 		return layouts;
 	}
-	
-	public static String[] getLayoutNames() {
-		getLayouts();
-		String[] res = new String[layouts.size()];
-		for(int i = 0; i < res.length; i++)
-			res[i] = layouts.get(i).getName();
-		return res;
-	}
 
 	private static void load(AssetManager am) {
 		try {

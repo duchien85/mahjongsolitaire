@@ -60,6 +60,11 @@ public class Layout {
 		setPositions(new java.util.ArrayList<Position>());
 	}
 
+	@Override
+	public String toString() {
+		return getName();
+	}
+
 	// public static Layout Import(Stream data)
 	// {
 	// var res = new Layout();

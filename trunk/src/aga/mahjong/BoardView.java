@@ -16,6 +16,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -66,8 +67,8 @@ public class BoardView extends View {
 	private BoardController controller;
 	private Board board;
 
-	public BoardView(Context context) {
-		super(context);
+	public BoardView(Context context, AttributeSet attrs) {
+		super(context, attrs);
 		controller = new BoardController(this);
 		SetScreenSize(320, 480);
 		setFocusable(true);
