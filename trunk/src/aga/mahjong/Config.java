@@ -20,8 +20,8 @@ public class Config {
 	private Config() {
 	}
 	
-	public boolean getIsRandom() {
-		return getPrefs().getBoolean(IS_RANDOM, false);
+	public boolean isRandom() {
+		return getPrefs().getBoolean(IS_RANDOM, true);
 	}
 
 	public void setIsRandom(boolean value) {

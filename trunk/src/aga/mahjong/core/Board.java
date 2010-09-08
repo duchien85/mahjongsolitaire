@@ -5,26 +5,6 @@ import java.util.HashSet;
 
 public class Board {
 
-	/*private static class PairComparer implements IEqualityComparer<Pair> {
-		public boolean equals(Pair x, Pair y) {
-			return ((x.Position1 == y.Position1 && x.Position2 == y.Position2) || (x.Position1 == y.Position2 && x.Position2 == y.Position1));
-		}
-
-		public int hashCode(Pair obj) {
-			return 0; // TODO: optimize
-		}
-	}
-
-	private static class TileComparer implements IEqualityComparer<Tile> {
-		public boolean equals(Tile x, Tile y) {
-			return x.Match(y);
-		}
-
-		public int hashCode(Tile obj) {
-			return 0;
-		}
-	}*/
-
 	private IArrangeStrategy _arrangement;
 	private Layout _layout;
 	private Tile[][][] _tiles;
@@ -135,13 +115,10 @@ public class Board {
 		boolean flag2 = true;
 		
 		for (int row = pos.getRow() - 1; row <= pos.getRow() + 1; row++) {
-			if (_tiles[pos.getLayer()][row][pos.getColumn() - 2] != null) {
+			if (getItem(pos.getLayer(), row, pos.getColumn() - 2) != null) {
 				flag1 = false;
 			}
-		}
-		
-		for (int row = pos.getRow() - 1; row <= pos.getRow() + 1; row++) {
-			if (_tiles[pos.getLayer()][row][pos.getColumn() + 2] != null) {
+			if (getItem(pos.getLayer(), row, pos.getColumn() + 2) != null) {
 				flag2 = false;
 			}
 		}
@@ -150,7 +127,7 @@ public class Board {
 			if (pos.getLayer() < getLayerCount() - 1) {
 				for (int row = pos.getRow() - 1; row <= pos.getRow() + 1; row++) {
 					for (int col = pos.getColumn() - 1; col <= pos.getColumn() + 1; col++) {
-						if (_tiles[pos.getLayer() + 1][row][col] != null) {
+						if (getItem(pos.getLayer() + 1, row, col) != null) {
 							return false;
 						}
 					}
