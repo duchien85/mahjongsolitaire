@@ -1,7 +1,6 @@
 package aga.mahjong;
 
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,13 +13,13 @@ public class OptionsActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.options);
 		
+		setContentView(R.layout.options);
 		View view = findViewById(R.id.options_view);
 		view.setFocusable(true);
 		view.setFocusableInTouchMode(true);
-
-		boolean random = false; // Config.getInstance().isRandom();
+		
+		boolean random = Config.getInstance().isRandom();
 		if (random)
 			((RadioButton)findViewById(R.id.random)).setChecked(true);
 		else
@@ -29,14 +28,12 @@ public class OptionsActivity extends Activity {
 		final Button change = (Button)findViewById(R.id.change_layout);
 		change.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				Intent intent = new Intent(Intent.ACTION_EDIT);
-				intent.setClassName("aga.mahjong", LayoutListActivity.class.getSimpleName());
-				startActivity(intent);
+				Intent intent = new Intent("aga.mahjong.CHANGE_LAYOUT");
+				startActivityForResult(intent, 1);
 			}
 		});
 
-		final TextView layout = (TextView)findViewById(R.id.layout_value);
-		//layout.setText(Config.getInstance().getLayout());
+		getLayoutView().setText(Config.getInstance().getLayout());
 		
 		final Button ok = (Button)findViewById(R.id.button_accept);
 		ok.setOnClickListener(new View.OnClickListener() {
@@ -52,28 +49,26 @@ public class OptionsActivity extends Activity {
 			}
 		});
 
-		/*view.setOnKeyListener(new View.OnKeyListener() {
-			@Override
-			public boolean onKey(View v, int keyCode, KeyEvent event) {
-				switch (keyCode) {
-				case KeyEvent.KEYCODE_BACK:
-					finish();
-					return true;
-				}
-				return false;
-			}
-		});*/
-
 		view.requestFocus();
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (data != null) {
+			String name = data.getStringExtra("aga.mahjong.RESULT");
+			getLayoutView().setText(name);
+		}
+	}
+	
+	private TextView getLayoutView() {
+		return (TextView)findViewById(R.id.layout_value);
+	}
+	
 	private void accept() {
 		RadioButton rb = (RadioButton)findViewById(R.id.random);
-		//Config.getInstance().setIsRandom(rb.isChecked());
-		
-		//ListView list = (ListView) main.findViewById(R.id.list);
-		//Config.getInstance().setLayout(list.getSelectedItem().toString());
-		
+		Config.getInstance().setIsRandom(rb.isChecked());
+		Config.getInstance().setLayout(getLayoutView().getText().toString());
+		setResult(1);
 		finish();
 	}
 }

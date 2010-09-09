@@ -6,22 +6,22 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import aga.mahjong.core.Layout;
+import android.app.Activity;
 import android.content.res.AssetManager;
 
 public class LayoutProvider {
 	private static final String dir = "layouts";
 
-	private static ArrayList<Layout> layouts;
+	private static ArrayList<Layout> layouts = new ArrayList<Layout>();
 
 	public static Collection<Layout> getLayouts() {
-		if (layouts == null)
-			load(MainActivity.getInstance().getAssets());
 		return layouts;
 	}
 
-	private static void load(AssetManager am) {
+	public static void init(Activity a) {
 		try {
-			layouts = new ArrayList<Layout>();
+			layouts.clear();
+			AssetManager am = a.getAssets();
 			for (String str : am.list(dir)) {
 				InputStream in = am.open(dir + "/" + str);
 				Layout layout = Layout.load(in);
