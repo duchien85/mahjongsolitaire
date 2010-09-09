@@ -1,5 +1,6 @@
 ﻿package aga.mahjong;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -8,16 +9,18 @@ public class Config {
 	private static final String IS_RANDOM = "IsRandom";
 	private static final String LAYOUT = "Layout";
 	
-	private static Config instance;
+	private static Config instance = new Config();
+	private Activity activity;
 
 	public static Config getInstance() {
-		if (instance == null) {
-			instance = new Config();
-		}
 		return instance;
 	}
 	
 	private Config() {
+	}
+	
+	public void init(Activity a) {
+		activity = a;
 	}
 	
 	public boolean isRandom() {
@@ -41,6 +44,6 @@ public class Config {
 	}
 	
 	private SharedPreferences getPrefs() {
-		return MainActivity.getInstance().getPreferences(Context.MODE_PRIVATE);
+		return activity.getPreferences(Context.MODE_PRIVATE);
 	}
 }
