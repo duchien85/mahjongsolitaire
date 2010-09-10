@@ -174,7 +174,7 @@ public class BoardView extends View {
 			y += top.getBitmap().getHeight();
 
 			drawDrawable(canvas, body, x, y);
-			drawDrawable(canvas, face, x + (bodyW - face.getBitmap().getWidth()) / 2, y);
+			drawDrawable(canvas, face, x + 2 + (bodyW - face.getBitmap().getWidth()) / 2, y);
 			y += body.getBitmap().getHeight();
 
 			drawDrawable(canvas, bottom, x, y);
