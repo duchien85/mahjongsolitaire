@@ -11,6 +11,8 @@ public class Config {
 	
 	private static Config instance = new Config();
 	private Activity activity;
+	private boolean isRandom;
+	private String layout;
 
 	public static Config getInstance() {
 		return instance;
@@ -21,29 +23,32 @@ public class Config {
 	
 	public void init(Activity a) {
 		activity = a;
+		SharedPreferences prefs = activity.getPreferences(Context.MODE_PRIVATE);
+		isRandom = prefs.getBoolean(IS_RANDOM, true);
+		layout = prefs.getString(LAYOUT, "well");
 	}
 	
 	public boolean isRandom() {
-		return getPrefs().getBoolean(IS_RANDOM, true);
+		return isRandom;
 	}
 
 	public void setIsRandom(boolean value) {
-		Editor editor = getPrefs().edit();
-		editor.putBoolean(IS_RANDOM, value);
-		editor.commit();
+		isRandom = value;
 	}
 
 	public String getLayout() {
-		return getPrefs().getString(LAYOUT, "turtle");
+		return layout;
 	}
 
 	public void setLayout(String value) {
-		Editor editor = getPrefs().edit();
-		editor.putString(LAYOUT, value);
-		editor.commit();
+		layout = value;
 	}
 	
-	private SharedPreferences getPrefs() {
-		return activity.getPreferences(Context.MODE_PRIVATE);
+	public void save() {
+		SharedPreferences prefs = activity.getPreferences(Context.MODE_PRIVATE);
+		Editor editor = prefs.edit();
+		editor.putBoolean(IS_RANDOM, isRandom);
+		editor.putString(LAYOUT, layout);
+		editor.commit();
 	}
 }

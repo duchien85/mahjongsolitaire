@@ -1,5 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
-    <string name="hello">Hello World, main!</string>
-    <string name="app_name">Mahjong</string>
+    <string name="app_name">Mahjong Solitaire</string>
+    <string name="app_version">1.0</string>
+    <string name="copyright">Copyright (C) 2010 Andrey Gliznetsov</string>
+    <string name="url">http://code.google.com/p/mahjongsolitaire/</string>
 </resources>

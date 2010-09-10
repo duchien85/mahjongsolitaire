@@ -4,24 +4,26 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Board {
-
-	private IArrangeStrategy _arrangement;
-	private Layout _layout;
-	private Tile[][][] _tiles;
+	private ArrayList<Position> selection = new ArrayList<Position>();
+	private IArrangeStrategy arrangement;
+	private Layout layout;
+	private Tile[][][] tiles;
+	private int layerCount, rowCount, columnCount;
+	private int tilesCount, payersCount;
 
 	public Tile getItem(Position pos) {
-		return _tiles[pos.getLayer()][pos.getRow()][pos.getColumn()];
+		return tiles[pos.getLayer()][pos.getRow()][pos.getColumn()];
 	}
 
 	public void setItem(Position pos, Tile value) {
-		_tiles[pos.getLayer()][pos.getRow()][pos.getColumn()] = value;
+		setItem(pos.getLayer(), pos.getRow(), pos.getColumn(), value);
 	}
 
 	public Tile getItem(int layer, int row, int column) {
 		if (layer < getLayerCount() && row < getRowCount()
 				&& column < getColumnCount() && layer >= 0 && row >= 0
 				&& column >= 0) {
-			return _tiles[layer][row][column];
+			return tiles[layer][row][column];
 		} else {
 			return null;
 		}
@@ -31,79 +33,64 @@ public class Board {
 		if (layer < getLayerCount() && row < getRowCount()
 				&& column < getColumnCount() && layer >= 0 && row >= 0
 				&& column >= 0) {
+			tiles[layer][row][column] = value;
 			ResetStatus();
-			_tiles[layer][row][column] = value;
 		}
 	}
 
-	private java.util.ArrayList<Position> _selection = new java.util.ArrayList<Position>();
-
 	public java.util.List<Position> getSelection() {
-		return _selection;
+		return selection;
 	}
-
-	private int _layerCount;
 
 	public int getLayerCount() {
-		return _layerCount;
+		return layerCount;
 	}
-
-	private int _rowCount;
 
 	public int getRowCount() {
-		return _rowCount;
+		return rowCount;
 	}
 
-	private int _columnCount;
-
 	public int getColumnCount() {
-		return _columnCount;
+		return columnCount;
 	}
 
 	public Iterable<Position> getAllPositions() {
-		return _layout.getPositions();
+		return layout.getPositions();
 	}
 
-	private int _tilesCount;
-
-	public synchronized int getTilesCount()
-	{
-		if (_tilesCount < 0)
-		{
-			_tilesCount = 0;
-			for(Position p : getAllPositions()) {
+	public synchronized int getTilesCount() {
+		if (tilesCount < 0) {
+			tilesCount = 0;
+			for (Position p : getAllPositions()) {
 				if (getItem(p) != null)
-					_tilesCount++;
+					tilesCount++;
 			}
 		}
-		return _tilesCount;
+		return tilesCount;
 	}
 
-	private int _payersCount;
-
 	public int getPayersCount() {
-		if (_payersCount < 0) {
-			_payersCount = GetPairs().length;
+		if (payersCount < 0) {
+			payersCount = GetPairs().length;
 		}
-		return _payersCount;
+		return payersCount;
 	}
 
 	public Board(Layout layout, IArrangeStrategy arrangement) {
-		_arrangement = arrangement;
-		_layout = layout;
-		_tiles = new Tile[layout.getLayerCount()][layout.getRowCount()][layout
+		this.arrangement = arrangement;
+		this.layout = layout;
+		tiles = new Tile[layout.getLayerCount()][layout.getRowCount()][layout
 				.getColumnCount()];
-		_layerCount = layout.getLayerCount();
-		_rowCount = layout.getRowCount();
-		_columnCount = layout.getColumnCount();
+		layerCount = layout.getLayerCount();
+		rowCount = layout.getRowCount();
+		columnCount = layout.getColumnCount();
 		ResetStatus();
 		Init();
 	}
 
-	public Cell[] GetFreePositions()
-	{
+	public Cell[] GetFreePositions() {
 		ArrayList<Cell> res = new ArrayList<Cell>();
-		for(Position p : getAllPositions()) {
+		for (Position p : getAllPositions()) {
 			if (getItem(p) != null && IsFree(p))
 				res.add(new Cell(p, this.getItem(p)));
 		}
@@ -113,7 +100,7 @@ public class Board {
 	public boolean IsFree(Position pos) {
 		boolean flag1 = true;
 		boolean flag2 = true;
-		
+
 		for (int row = pos.getRow() - 1; row <= pos.getRow() + 1; row++) {
 			if (getItem(pos.getLayer(), row, pos.getColumn() - 2) != null) {
 				flag1 = false;
@@ -139,34 +126,30 @@ public class Board {
 		}
 	}
 
-	public Pair[] GetPairs()
-	{
+	public Pair[] GetPairs() {
 		HashSet<Pair> res = new HashSet<Pair>();
 		Cell[] positions = GetFreePositions();
-		for(Cell p : positions) {
-			for(Cell q : positions) {
-				if (!p.getPosition().equals(q.getPosition()) && Tile.isMatch(p.getTile(), q.getTile()))
+		for (Cell p : positions) {
+			for (Cell q : positions) {
+				if (!p.getPosition().equals(q.getPosition())
+						&& Tile.isMatch(p.getTile(), q.getTile()))
 					res.add(new Pair(p.getPosition(), q.getPosition()));
 			}
 		}
 		return res.toArray(new Pair[res.size()]);
-		/*return positions.Join(positions, p => p.Tile, p => p.Tile, 
-				(p, q) => new Pair(p.Position, q.Position), new TileComparer())
-				.Where(p => p.Position1 != p.Position2)
-				.Distinct(new PairComparer()).toArray();*/
 	}
 
 	public void Init() {
 		getSelection().clear();
-		_arrangement.Arrange(this);
+		arrangement.Arrange(this);
 	}
 
 	public void Restart() {
 		getSelection().clear();
-		_arrangement.Restore(this);
+		arrangement.Restore(this);
 	}
 
 	private void ResetStatus() {
-		_payersCount = _tilesCount = -1;
+		payersCount = tilesCount = -1;
 	}
 }

@@ -5,6 +5,6 @@
 	<aga.mahjong.BoardView  
       android:id="@+id/boardView"
 	  android:layout_width="fill_parent"
-	  android:layout_height="fill_parent" 
+	  android:layout_height="fill_parent"
 	/>
 </FrameLayout>

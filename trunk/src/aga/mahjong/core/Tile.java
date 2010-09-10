@@ -1,21 +1,20 @@
 ﻿package aga.mahjong.core;
 
 public class Tile {
-	private TileKind _kind = TileKind.forValue(0);
+	private final TileKind kind;
+	private final int number;
 
 	public TileKind getKind() {
-		return _kind;
+		return kind;
 	}
 
-	private int _number;
-
 	public int getNumber() {
-		return _number;
+		return number;
 	}
 
 	public Tile(TileKind kind, int number) {
-		_kind = kind;
-		_number = number;
+		this.kind = kind;
+		this.number = number;
 	}
 
 	@Override

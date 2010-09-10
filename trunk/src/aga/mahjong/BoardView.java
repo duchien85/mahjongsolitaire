@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
@@ -24,24 +25,20 @@ import android.view.View;
 public class BoardView extends View {
 
 	private final static class PositionInfo {
-		private Position _position;
-		private Rect _bounds;
+		private final Position position;
+		private final Rect bounds;
 
 		public Position getPosition() {
-			return _position;
+			return position;
 		}
 
 		public Rect getBounds() {
-			return _bounds;
+			return bounds;
 		}
 
 		public PositionInfo(Position pos, Rect rect) {
-			_position = pos;
-			_bounds = rect;
-		}
-
-		public PositionInfo clone() {
-			return new PositionInfo(_position, _bounds);
+			position = pos;
+			bounds = rect;
 		}
 	}
 
@@ -49,7 +46,7 @@ public class BoardView extends View {
 	private static final int CellHeight = 45;
 	private static final int TileWidth = 36;
 	private static final int TileHeight = 49;
-	private static final int StatusBarHeight = 40;
+	private static final int StatusBarHeight = 10;
 
 	private java.util.ArrayList<PositionInfo> _bounds = new java.util.ArrayList<PositionInfo>();
 
@@ -60,22 +57,24 @@ public class BoardView extends View {
 	private HashMap<Tile, BitmapDrawable> _faces;
 	private BitmapDrawable _tile1_top, _tile1_body, _tile1_bottom;
 	private BitmapDrawable _tile2_top, _tile2_body, _tile2_bottom;
-
-	private int mScreenWidth;
-	private int mScreenHeight;
-
+	private Paint textPaint;
+	private int screenWidth, screenHeight;
 	private BoardController controller;
 	private Board board;
 
 	public BoardView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		controller = new BoardController(this);
-		SetScreenSize(320, 480);
 		setFocusable(true);
 		setFocusableInTouchMode(true);
 		LoadImages();
+		
+		textPaint = new Paint();
+		textPaint.setColor(Color.BLACK);
+		textPaint.setTextSize(16);
+		textPaint.setAntiAlias(true);
+		textPaint.setFakeBoldText(true);
 	}
-
 
 	public Board getBoard() {
 		return board;
@@ -83,6 +82,7 @@ public class BoardView extends View {
 
 	public void setBoard(Board value) {
 		board = value;
+		update();
 	}
 
 	public BoardController getController() {
@@ -90,16 +90,16 @@ public class BoardView extends View {
 	}
 
 	public int GetWidth() {
-		return mScreenWidth;
+		return screenWidth;
 	}
 
 	public int GetHeight() {
-		return mScreenHeight;
+		return screenHeight;
 	}
 
 	public void SetScreenSize(int width, int height) {
-		mScreenWidth = width;
-		mScreenHeight = height;
+		screenWidth = width;
+		screenHeight = height;
 		//mBoardBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
 		//mBoardCanvas = new Canvas(mBoardBitmap);
 	}
@@ -146,8 +146,13 @@ public class BoardView extends View {
 	}
 
 	private void DrawTiles(Canvas canvas) {
-		int sx = (int) ((mScreenWidth - Math.ceil(board.getColumnCount() / 2.0)	* CellWidth) / 2);
-		int sy = (int) ((mScreenHeight - StatusBarHeight - Math.ceil(board.getRowCount() / 2.0)	* CellHeight) / 2);
+		_bounds.clear();
+		if (board == null) {
+			return;
+		}
+		
+		int sx = (int) ((screenWidth - Math.ceil(board.getColumnCount() / 2.0)	* CellWidth) / 2);
+		int sy = (int) ((screenHeight - StatusBarHeight - Math.ceil(board.getRowCount() / 2.0)	* CellHeight) / 2);
 
 		for (Cell cell : getDrawList()) {
 			Position pos = cell.getPosition();
@@ -183,18 +188,13 @@ public class BoardView extends View {
 
 	private void drawDrawable(Canvas canvas, BitmapDrawable d, int x, int y) {
 		d.setBounds(x, y, x + d.getBitmap().getWidth(), y + d.getBitmap().getHeight());
-		// d.setColorFilter(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 		d.draw(canvas);
 	}
-
-	/*
-	 * private void DrawStatus() { var str =
-	 * String.format("Tiles: %1$s   Pairs: %2$s", _board.TilesCount,
-	 * _board.PayersCount); Rectangle rect = new Rectangle(0, Height -
-	 * StatusBarHeight, Width, StatusBarHeight);
-	 * _gr.FillRectangle(LightGreenBrush, rect); _gr.DrawString(str, Font,
-	 * BlackBrush, 0, rect.Y); }a
-	 */
+	
+	private void drawStatus(Canvas canvas) {
+		String str = String.format("Tiles: %1$s   Pairs: %2$s", board.getTilesCount(), board.getPayersCount());
+		canvas.drawText(str, 0, screenHeight - StatusBarHeight, textPaint);
+	}	 
 
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 		SetScreenSize(w, h);
@@ -203,19 +203,10 @@ public class BoardView extends View {
 
 	@Override
 	public void onDraw(Canvas canvas) {
-		drawBoard(canvas);
-		// canvas.drawBitmap(mBoardBitmap, 0, 0, mSuitPaint);
-	}
-
-	private void drawBoard(Canvas canvas) {
-		_bounds.clear();
 		canvas.drawColor(Color.GREEN);
-		if (board == null) {
-			return;
-		}
-
 		DrawTiles(canvas);
-		// DrawStatus();
+		drawStatus(canvas);
+		// canvas.drawBitmap(mBoardBitmap, 0, 0, mSuitPaint);
 	}
 
 	@Override
@@ -250,9 +241,10 @@ public class BoardView extends View {
 		invalidate();
 	}
 
-	public void showDialog(String string) {
+	public void showDialog(String title, String message) {
 		new AlertDialog.Builder(getContext())
-	      .setMessage(string)
+	      .setTitle(title)
+	      .setMessage(message)
 	      .setPositiveButton("OK", null)
 	      .show();
 	}
