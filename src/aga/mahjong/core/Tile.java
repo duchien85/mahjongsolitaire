@@ -1,6 +1,10 @@
 ﻿package aga.mahjong.core;
 
-public class Tile {
+import java.io.Serializable;
+
+public final class Tile implements Serializable {
+	private static final long serialVersionUID = -1138962143340254654L;
+	
 	private final TileKind kind;
 	private final int number;
 
@@ -59,4 +63,28 @@ public class Tile {
 		}
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((kind == null) ? 0 : kind.hashCode());
+		result = prime * result + number;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Tile other = (Tile) obj;
+		if (kind != other.kind)
+			return false;
+		if (number != other.number)
+			return false;
+		return true;
+	}
 }

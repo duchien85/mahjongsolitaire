@@ -1,5 +1,10 @@
 ﻿package aga.mahjong;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Stack;
 
 import aga.mahjong.core.Board;
@@ -9,16 +14,19 @@ import aga.mahjong.core.Layout;
 import aga.mahjong.core.Pair;
 import aga.mahjong.core.Position;
 import aga.mahjong.core.RandomArrange;
+import aga.mahjong.core.SolvableArrange;
 import aga.mahjong.core.Tile;
 
 public class BoardController {
 	private BoardView view;
 	private boolean hintMode;
 	private Stack<Cell> undoStack;
+	private IArrangeStrategy arrangement;
 
 	public BoardController(BoardView view) {
 		this.view = view;
 		undoStack = new Stack<Cell>();
+		initArrangement();
 	}
 
 	private Board getBoard() {
@@ -72,6 +80,7 @@ public class BoardController {
 
 	public void undo() {
 		if (undoStack.size() > 0) {
+			hintMode = false;
 			getBoard().getSelection().clear();
 			restoreCell();
 			restoreCell();
@@ -86,17 +95,20 @@ public class BoardController {
 
 	public void startNewGame() {
 		Layout layout = LayoutProvider.getLayout(Config.getInstance().getLayout());
-		IArrangeStrategy ar = new RandomArrange();
-		/*if (Config.getInstance().getIsRandom()) {
-			ar = new RandomArrange();
-		} else {
-			ar = new RandomArrange();
-		}*/
-		setBoard(new Board(layout, ar));
+		setBoard(new Board(layout));
+		hintMode = false;
+		getBoard().getSelection().clear();
+		initArrangement();
+		arrangement.Arrange(getBoard());
+		view.update();
 	}
 
 	public void restart() {
-		getBoard().Restart();
+		hintMode = false;
+		getBoard().getSelection().clear();
+		while (!undoStack.isEmpty()) {
+			restoreCell();
+		}
 		view.update();
 	}
 
@@ -108,5 +120,26 @@ public class BoardController {
 			getBoard().getSelection().add(pair.getPosition2());
 		}
 		view.update();
+	}
+
+	public void loadState(FileInputStream in) throws Exception {
+		ObjectInputStream objIn = new ObjectInputStream(in);
+		setBoard( (Board)objIn.readObject() );
+		undoStack = (Stack<Cell>)objIn.readObject();
+		view.update();
+	}
+
+	public void saveState(FileOutputStream out) throws IOException {
+		ObjectOutputStream objOut = new ObjectOutputStream(out);
+		objOut.writeObject(getBoard());
+		objOut.writeObject(undoStack);
+	}
+
+	private void initArrangement() {
+		if (Config.getInstance().isRandom()) {
+			arrangement = new RandomArrange();
+		} else {
+			arrangement = new SolvableArrange();
+		}
 	}
 }

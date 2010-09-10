@@ -3,8 +3,11 @@
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 
-public class Position {
+public final class Position implements Serializable {
+	private static final long serialVersionUID = -3293495485141107663L;
+	
 	private final int row;
 	private final int column;
 	private final int layer;
