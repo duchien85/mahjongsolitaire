@@ -65,9 +65,9 @@ public class BoardController {
 
 	private void checkGame() {
 		if (getBoard().getTilesCount() == 0)
-			view.showDialog("You won!");
+			view.showDialog(null, "You won!");
 		else if (getBoard().getPayersCount() == 0)
-			view.showDialog("Game over.");
+			view.showDialog(null, "Game over.");
 	}
 
 	public void undo() {
@@ -93,7 +93,6 @@ public class BoardController {
 			ar = new RandomArrange();
 		}*/
 		setBoard(new Board(layout, ar));
-		view.update();
 	}
 
 	public void restart() {

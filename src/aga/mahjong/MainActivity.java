@@ -25,7 +25,19 @@ public class MainActivity extends Activity {
 		
         setContentView(R.layout.main);
         boardView = (BoardView)findViewById(R.id.boardView);
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		//TODO: restore Game();
 		boardView.getController().startNewGame();
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		//TODO: SaveGame();
 	}
 
 	@Override
@@ -51,10 +63,19 @@ public class MainActivity extends Activity {
 			boardView.getController().showHint();
 			break;
 		case R.id.options:
-			startActivityForResult(new Intent("aga.mahjong.OPTIONS"), 1);
+			startActivityForResult(new Intent(Names.ACTION_OPTIONS), 1);
 			break;
 		case R.id.quit:
 			finish();
+			break;
+		case R.id.about:
+			String title = String.format("%1$s %2$s", 
+					getResources().getString(R.string.app_name),
+					getResources().getString(R.string.app_version));
+			String message = String.format("%1$s\n%2$s", 
+					getResources().getString(R.string.copyright),
+					getResources().getString(R.string.url));
+			boardView.showDialog(title, message);
 			break;
 		}
 		return false;

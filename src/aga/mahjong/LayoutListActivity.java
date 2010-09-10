@@ -31,7 +31,7 @@ public class LayoutListActivity extends ListActivity {
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		String name = layouts[position].toString();
 		Intent intent = getIntent();
-		intent.putExtra("aga.mahjong.RESULT", name);
+		intent.putExtra(Names.EXTRA_RESULT, name);
 		setResult(0, intent);
 		finish();
 	}

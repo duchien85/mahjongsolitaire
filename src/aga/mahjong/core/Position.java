@@ -4,83 +4,46 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class Position
-{
-	private int row;
-	private int column;
-	private int layer;
-	
-	public int getRow()
-	{
+public class Position {
+	private final int row;
+	private final int column;
+	private final int layer;
+
+	public int getRow() {
 		return row;
 	}
-	
-	public void setRow(int value)
-	{
-		row = value;
-	}
 
-	public int getColumn()
-	{
+	public int getColumn() {
 		return column;
 	}
-	
-	public void setColumn(int value)
-	{
-		column = value;
-	}
 
-	public int getLayer()
-	{
+	public int getLayer() {
 		return layer;
 	}
-	
-	public void setLayer(int value)
-	{
-		layer = value;
-	}
 
-	/*public static boolean OpEquality(Position a, Position b)
-	{
-		return a.getLayer() == b.getLayer() && a.getRow() == b.getRow() && a.getColumn() == b.getColumn();
-	}
-
-	public static boolean OpInequality(Position a, Position b)
-	{
-		return !(Position.OpEquality(a, b));
-	}*/
-
-	public Position(int layer, int row, int column)
-	{
+	public Position(int layer, int row, int column) {
 		this.layer = layer;
 		this.row = row;
 		this.column = column;
 	}
 
 	@Override
-	public String toString()
-	{
-		return String.format("[%1$s,%2$s,%3$s]", getLayer(), getRow(), getColumn());
+	public String toString() {
+		return String.format("[%1$s,%2$s,%3$s]", getLayer(), getRow(),
+				getColumn());
 	}
 
-	public void write(OutputStream stream) throws IOException
-	{
-		stream.write((byte)layer);
-		stream.write((byte)row);
-		stream.write((byte)column);
+	public void write(OutputStream stream) throws IOException {
+		stream.write((byte) layer);
+		stream.write((byte) row);
+		stream.write((byte) column);
 	}
 
-	public static Position read(InputStream stream) throws IOException
-	{
+	public static Position read(InputStream stream) throws IOException {
 		int lay = stream.read();
 		int row = stream.read();
 		int col = stream.read();
 		return new Position(lay, row, col);
-	}
-
-	public Position clone()
-	{
-		return new Position(layer, row, column);
 	}
 
 	@Override

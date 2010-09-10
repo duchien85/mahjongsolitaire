@@ -28,7 +28,7 @@ public class OptionsActivity extends Activity {
 		final Button change = (Button)findViewById(R.id.change_layout);
 		change.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				Intent intent = new Intent("aga.mahjong.CHANGE_LAYOUT");
+				Intent intent = new Intent(Names.ACTION_CHANGE_LAYOUT);
 				startActivityForResult(intent, 1);
 			}
 		});
@@ -55,7 +55,7 @@ public class OptionsActivity extends Activity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (data != null) {
-			String name = data.getStringExtra("aga.mahjong.RESULT");
+			String name = data.getStringExtra(Names.EXTRA_RESULT);
 			getLayoutView().setText(name);
 		}
 	}
@@ -66,8 +66,10 @@ public class OptionsActivity extends Activity {
 	
 	private void accept() {
 		RadioButton rb = (RadioButton)findViewById(R.id.random);
-		Config.getInstance().setIsRandom(rb.isChecked());
-		Config.getInstance().setLayout(getLayoutView().getText().toString());
+		Config cfg = Config.getInstance();
+		cfg.setIsRandom(rb.isChecked());
+		cfg.setLayout(getLayoutView().getText().toString());
+		cfg.save();
 		setResult(1);
 		finish();
 	}
