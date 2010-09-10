@@ -8,7 +8,8 @@
   <LinearLayout
     android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="10px">
 
     <TextView
       android:layout_width="fill_parent"
@@ -38,34 +39,48 @@
       android:text="Layout:"
     />
     
-    <TextView android:id="@+id/layout_value"
-      android:text="[value]"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:textSize="20sp"
-    />
-    
-    <Button android:id="@+id/change_layout"
-      android:text="Change"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content" 
-     />
-    
-    
-    <LinearLayout
+    <RelativeLayout
       android:orientation="horizontal"
       android:layout_width="fill_parent"
-      android:gravity="center"
       android:layout_height="wrap_content">
-      <Button android:id="@+id/button_accept"
-        android:text="OK"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+	    <TextView android:id="@+id/layout_value"
+	      android:text="[value]"
+	      android:layout_width="wrap_content"
+	      android:layout_height="wrap_content"
+	      android:textSize="20sp"
+	    />
+	    <Button android:id="@+id/change_layout"
+	      android:text="Change"
+		  android:layout_width="80px"
+	      android:layout_height="wrap_content" 
+		  android:layout_alignParentRight="true"
+	     />
+    </RelativeLayout>
+    
+    <!-- LayoutView android:id="@+id/layout_view"
+      android:layout_width="200px"
+      android:layout_height="200px"
+    /-->
+    
+    <RelativeLayout
+      android:orientation="horizontal"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="20px">
       <Button android:id="@+id/button_cancel"
         android:text="Cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    </LinearLayout>
+        android:layout_width="80px"
+        android:layout_height="wrap_content" 
+		android:layout_alignParentRight="true"
+        />
+      <Button android:id="@+id/button_accept"
+        android:text="OK"
+        android:layout_width="80px"
+        android:layout_height="wrap_content" 
+		android:layout_toLeftOf="@id/button_cancel"
+        android:layout_alignTop="@id/button_cancel"
+        />
+    </RelativeLayout>
     
   </LinearLayout>
 </ScrollView>

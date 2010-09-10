@@ -48,10 +48,6 @@ public class BoardView extends View {
 	private static final int TileHeight = 49;
 	private static final int StatusBarHeight = 10;
 
-	//private Bitmap mBoardBitmap;
-	//private Canvas mBoardCanvas;
-	//private final Paint mSuitPaint = new Paint();
-
 	private ArrayList<PositionInfo> bounds = new ArrayList<PositionInfo>();
 	private HashMap<Tile, BitmapDrawable> faces;
 	private BitmapDrawable _tile1_top, _tile1_body, _tile1_bottom;
@@ -99,8 +95,6 @@ public class BoardView extends View {
 	public void SetScreenSize(int width, int height) {
 		screenWidth = width;
 		screenHeight = height;
-		//mBoardBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-		//mBoardCanvas = new Canvas(mBoardBitmap);
 	}
 
 	private void LoadImages() {
@@ -208,7 +202,6 @@ public class BoardView extends View {
 		
 		DrawTiles(canvas);
 		drawStatus(canvas);
-		// canvas.drawBitmap(mBoardBitmap, 0, 0, mSuitPaint);
 	}
 
 	@Override
