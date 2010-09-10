@@ -1,12 +1,14 @@
 ﻿package aga.mahjong.core;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class Board {
+public class Board implements Serializable {
+	private static final long serialVersionUID = -5903179874925723302L;
+	
 	private ArrayList<Position> selection = new ArrayList<Position>();
-	private IArrangeStrategy arrangement;
-	private Layout layout;
+	private final Layout layout;
 	private Tile[][][] tiles;
 	private int layerCount, rowCount, columnCount;
 	private int tilesCount, payersCount;
@@ -76,8 +78,7 @@ public class Board {
 		return payersCount;
 	}
 
-	public Board(Layout layout, IArrangeStrategy arrangement) {
-		this.arrangement = arrangement;
+	public Board(Layout layout) {
 		this.layout = layout;
 		tiles = new Tile[layout.getLayerCount()][layout.getRowCount()][layout
 				.getColumnCount()];
@@ -85,7 +86,6 @@ public class Board {
 		rowCount = layout.getRowCount();
 		columnCount = layout.getColumnCount();
 		ResetStatus();
-		Init();
 	}
 
 	public Cell[] GetFreePositions() {
@@ -137,16 +137,6 @@ public class Board {
 			}
 		}
 		return res.toArray(new Pair[res.size()]);
-	}
-
-	public void Init() {
-		getSelection().clear();
-		arrangement.Arrange(this);
-	}
-
-	public void Restart() {
-		getSelection().clear();
-		arrangement.Restore(this);
 	}
 
 	private void ResetStatus() {

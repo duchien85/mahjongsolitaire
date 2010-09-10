@@ -1,5 +1,9 @@
 package aga.mahjong;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +12,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 public class MainActivity extends Activity {
+	private static final String STATE_FILE_NAME = "state.data";
+	
 	private BoardView boardView;
 	
 	public BoardView getBoardView() {
@@ -30,14 +36,37 @@ public class MainActivity extends Activity {
 	@Override
 	public void onStart() {
 		super.onStart();
-		//TODO: restore Game();
-		boardView.getController().startNewGame();
+		File file = getFileStreamPath(STATE_FILE_NAME);
+		if (file.exists()) {
+			try {
+				FileInputStream in = new FileInputStream(file);
+				try {
+					boardView.getController().loadState(in);
+				} finally {
+					in.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				boardView.getController().startNewGame();
+			}
+		}
+		else
+			boardView.getController().startNewGame();
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-		//TODO: SaveGame();
+		try {
+			FileOutputStream out = openFileOutput(STATE_FILE_NAME, MODE_PRIVATE);
+			try {
+				boardView.getController().saveState(out);
+			} finally {
+				out.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

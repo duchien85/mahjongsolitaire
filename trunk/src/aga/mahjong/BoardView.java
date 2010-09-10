@@ -48,13 +48,12 @@ public class BoardView extends View {
 	private static final int TileHeight = 49;
 	private static final int StatusBarHeight = 10;
 
-	private java.util.ArrayList<PositionInfo> _bounds = new java.util.ArrayList<PositionInfo>();
-
 	//private Bitmap mBoardBitmap;
 	//private Canvas mBoardCanvas;
 	//private final Paint mSuitPaint = new Paint();
 
-	private HashMap<Tile, BitmapDrawable> _faces;
+	private ArrayList<PositionInfo> bounds = new ArrayList<PositionInfo>();
+	private HashMap<Tile, BitmapDrawable> faces;
 	private BitmapDrawable _tile1_top, _tile1_body, _tile1_bottom;
 	private BitmapDrawable _tile2_top, _tile2_body, _tile2_bottom;
 	private Paint textPaint;
@@ -107,7 +106,7 @@ public class BoardView extends View {
 	private void LoadImages() {
 		Resources r = getContext().getResources();
 
-		_faces = new java.util.HashMap<Tile, BitmapDrawable>();
+		faces = new java.util.HashMap<Tile, BitmapDrawable>();
 		_tile1_top = (BitmapDrawable) r.getDrawable(R.drawable.tile1_1);
 		_tile1_body = (BitmapDrawable) r.getDrawable(R.drawable.tile1_2);
 		_tile1_bottom = (BitmapDrawable) r.getDrawable(R.drawable.tile1_3);
@@ -120,7 +119,7 @@ public class BoardView extends View {
 				String name = String.format("%1$s%2$s", t.getKind(), t.getNumber());
 				Field field = R.drawable.class.getField(name.toLowerCase());
 				BitmapDrawable face = (BitmapDrawable) r.getDrawable(field.getInt(t));
-				_faces.put(t, face);
+				faces.put(t, face);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
@@ -146,7 +145,7 @@ public class BoardView extends View {
 	}
 
 	private void DrawTiles(Canvas canvas) {
-		_bounds.clear();
+		bounds.clear();
 		if (board == null) {
 			return;
 		}
@@ -156,7 +155,7 @@ public class BoardView extends View {
 
 		for (Cell cell : getDrawList()) {
 			Position pos = cell.getPosition();
-			BitmapDrawable face = _faces.get(cell.getTile());
+			BitmapDrawable face = faces.get(cell.getTile());
 			BitmapDrawable top, body, bottom;
 
 			if (board.getSelection().contains(pos)) {
@@ -172,7 +171,7 @@ public class BoardView extends View {
 			int bodyW = body.getBitmap().getWidth();
 			int x = sx + pos.getColumn() * CellWidth / 2 + pos.getLayer() * 4;
 			int y = sy + pos.getRow() * CellHeight / 2 - pos.getLayer() * 4;
-			_bounds.add(new PositionInfo(cell.getPosition(), 
+			bounds.add(new PositionInfo(cell.getPosition(), 
 					new Rect(x, y,	x + TileWidth, y + TileHeight)));
 
 			drawDrawable(canvas, top, x, y);
@@ -204,6 +203,9 @@ public class BoardView extends View {
 	@Override
 	public void onDraw(Canvas canvas) {
 		canvas.drawColor(Color.GREEN);
+		if (screenHeight <= 0 || screenWidth <= 0)
+			return;
+		
 		DrawTiles(canvas);
 		drawStatus(canvas);
 		// canvas.drawBitmap(mBoardBitmap, 0, 0, mSuitPaint);
@@ -229,9 +231,9 @@ public class BoardView extends View {
 	}
 
 	protected void onMouseDown(int x, int y) {
-		for (int i = _bounds.size() - 1; i >= 0; i--) {
-			if (_bounds.get(i).getBounds().contains(x, y)) {
-				controller.clickTile(_bounds.get(i).getPosition());
+		for (int i = bounds.size() - 1; i >= 0; i--) {
+			if (bounds.get(i).getBounds().contains(x, y)) {
+				controller.clickTile(bounds.get(i).getPosition());
 				break;
 			}
 		}

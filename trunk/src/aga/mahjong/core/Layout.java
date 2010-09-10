@@ -3,9 +3,12 @@
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Layout {
+public class Layout implements Serializable {
+	private static final long serialVersionUID = -3732566188318873821L;
+	
 	private ArrayList<Position> positions = new ArrayList<Position>();
 	private String name;
 	private int layerCount;
