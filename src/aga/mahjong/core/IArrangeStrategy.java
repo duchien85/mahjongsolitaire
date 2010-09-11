@@ -2,6 +2,6 @@
 
 
 public interface IArrangeStrategy {
-	void Arrange(Board board);
+	void arrange(Board board);
 	//void Restore(Board board);
 }

@@ -43,7 +43,7 @@ public class BoardController {
 			hintMode = false;
 		}
 
-		if (getBoard().getSelection().contains(position) || !getBoard().IsFree(position))
+		if (getBoard().getSelection().contains(position) || !getBoard().isFree(position))
 			return;
 
 		if (getBoard().getSelection().size() > 0) {
@@ -99,7 +99,7 @@ public class BoardController {
 		hintMode = false;
 		getBoard().getSelection().clear();
 		initArrangement();
-		arrangement.Arrange(getBoard());
+		arrangement.arrange(getBoard());
 		view.update();
 	}
 
@@ -115,7 +115,7 @@ public class BoardController {
 	public void showHint() {
 		hintMode = true;
 		getBoard().getSelection().clear();
-		for (Pair pair : getBoard().GetPairs()) {
+		for (Pair pair : getBoard().getPairs()) {
 			getBoard().getSelection().add(pair.getPosition1());
 			getBoard().getSelection().add(pair.getPosition2());
 		}

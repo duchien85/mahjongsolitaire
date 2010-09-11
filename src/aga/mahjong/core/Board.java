@@ -36,7 +36,7 @@ public class Board implements Serializable {
 				&& column < getColumnCount() && layer >= 0 && row >= 0
 				&& column >= 0) {
 			tiles[layer][row][column] = value;
-			ResetStatus();
+			resetStatus();
 		}
 	}
 
@@ -73,31 +73,30 @@ public class Board implements Serializable {
 
 	public int getPayersCount() {
 		if (payersCount < 0) {
-			payersCount = GetPairs().length;
+			payersCount = getPairs().length;
 		}
 		return payersCount;
 	}
 
 	public Board(Layout layout) {
 		this.layout = layout;
-		tiles = new Tile[layout.getLayerCount()][layout.getRowCount()][layout
-				.getColumnCount()];
+		tiles = new Tile[layout.getLayerCount()][layout.getRowCount()][layout.getColumnCount()];
 		layerCount = layout.getLayerCount();
 		rowCount = layout.getRowCount();
 		columnCount = layout.getColumnCount();
-		ResetStatus();
+		resetStatus();
 	}
 
-	public Cell[] GetFreePositions() {
+	public Cell[] getFreePositions() {
 		ArrayList<Cell> res = new ArrayList<Cell>();
 		for (Position p : getAllPositions()) {
-			if (getItem(p) != null && IsFree(p))
+			if (getItem(p) != null && isFree(p))
 				res.add(new Cell(p, this.getItem(p)));
 		}
 		return res.toArray(new Cell[res.size()]);
 	}
 
-	public boolean IsFree(Position pos) {
+	public boolean isFree(Position pos) {
 		boolean flag1 = true;
 		boolean flag2 = true;
 
@@ -126,9 +125,9 @@ public class Board implements Serializable {
 		}
 	}
 
-	public Pair[] GetPairs() {
+	public Pair[] getPairs() {
 		HashSet<Pair> res = new HashSet<Pair>();
-		Cell[] positions = GetFreePositions();
+		Cell[] positions = getFreePositions();
 		for (Cell p : positions) {
 			for (Cell q : positions) {
 				if (!p.getPosition().equals(q.getPosition())
@@ -139,7 +138,7 @@ public class Board implements Serializable {
 		return res.toArray(new Pair[res.size()]);
 	}
 
-	private void ResetStatus() {
+	private void resetStatus() {
 		payersCount = tilesCount = -1;
 	}
 }

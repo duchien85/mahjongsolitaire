@@ -33,7 +33,7 @@ public class OptionsActivity extends Activity {
 			}
 		});
 
-		getLayoutView().setText(Config.getInstance().getLayout());
+		displayLayout(Config.getInstance().getLayout());
 		
 		final Button ok = (Button)findViewById(R.id.button_accept);
 		ok.setOnClickListener(new View.OnClickListener() {
@@ -52,15 +52,21 @@ public class OptionsActivity extends Activity {
 		view.requestFocus();
 	}
 
+	private void displayLayout(String name) {
+		getLayoutName().setText(name);
+		((LayoutView)findViewById(R.id.layout_view)).
+			setLayout(LayoutProvider.getLayout(name));
+	}
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (data != null) {
 			String name = data.getStringExtra(Names.EXTRA_RESULT);
-			getLayoutView().setText(name);
+			displayLayout(name);
 		}
 	}
 	
-	private TextView getLayoutView() {
+	private TextView getLayoutName() {
 		return (TextView)findViewById(R.id.layout_value);
 	}
 	
@@ -68,7 +74,7 @@ public class OptionsActivity extends Activity {
 		RadioButton rb = (RadioButton)findViewById(R.id.random);
 		Config cfg = Config.getInstance();
 		cfg.setIsRandom(rb.isChecked());
-		cfg.setLayout(getLayoutView().getText().toString());
+		cfg.setLayout(getLayoutName().getText().toString());
 		cfg.save();
 		setResult(1);
 		finish();
