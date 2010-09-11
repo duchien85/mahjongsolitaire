@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 
 public class SolvableArrange implements IArrangeStrategy {
-	public void Arrange(Board board) {
+	public void arrange(Board board) {
 		//TODO: implement
 		java.util.Random rnd = new java.util.Random();
 		ArrayList<Tile> initLayout = new ArrayList<Tile>();

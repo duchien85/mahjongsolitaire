@@ -62,7 +62,7 @@ public class BoardView extends View {
 		controller = new BoardController(this);
 		setFocusable(true);
 		setFocusableInTouchMode(true);
-		LoadImages();
+		loadImages();
 		
 		textPaint = new Paint();
 		textPaint.setColor(Color.BLACK);
@@ -84,20 +84,7 @@ public class BoardView extends View {
 		return controller;
 	}
 
-	public int GetWidth() {
-		return screenWidth;
-	}
-
-	public int GetHeight() {
-		return screenHeight;
-	}
-
-	public void SetScreenSize(int width, int height) {
-		screenWidth = width;
-		screenHeight = height;
-	}
-
-	private void LoadImages() {
+	private void loadImages() {
 		Resources r = getContext().getResources();
 
 		faces = new java.util.HashMap<Tile, BitmapDrawable>();
@@ -138,7 +125,7 @@ public class BoardView extends View {
 		return res;
 	}
 
-	private void DrawTiles(Canvas canvas) {
+	private void drawTiles(Canvas canvas) {
 		bounds.clear();
 		if (board == null) {
 			return;
@@ -190,7 +177,8 @@ public class BoardView extends View {
 	}	 
 
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-		SetScreenSize(w, h);
+		screenWidth = w;
+		screenHeight = h;
 		super.onSizeChanged(w, h, oldw, oldh);
 	}
 
@@ -200,7 +188,7 @@ public class BoardView extends View {
 		if (screenHeight <= 0 || screenWidth <= 0)
 			return;
 		
-		DrawTiles(canvas);
+		drawTiles(canvas);
 		drawStatus(canvas);
 	}
 

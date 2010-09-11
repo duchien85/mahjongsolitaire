@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 
 public class RandomArrange implements IArrangeStrategy {
-	public void Arrange(Board board) {
+	public void arrange(Board board) {
 		java.util.Random rnd = new java.util.Random();
 		ArrayList<Tile> initLayout = new ArrayList<Tile>();
 		ArrayList<Tile> tiles = new ArrayList<Tile>(TileSet.getAllTiles());
