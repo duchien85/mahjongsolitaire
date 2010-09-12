@@ -21,12 +21,10 @@ public class BoardController {
 	private BoardView view;
 	private boolean hintMode;
 	private Stack<Cell> undoStack;
-	private IArrangeStrategy arrangement;
 
 	public BoardController(BoardView view) {
 		this.view = view;
 		undoStack = new Stack<Cell>();
-		initArrangement();
 	}
 
 	private Board getBoard() {
@@ -94,13 +92,12 @@ public class BoardController {
 	}
 
 	public void startNewGame() {
-		Layout layout = LayoutProvider.getLayout(Config.getInstance().getLayout());
-		setBoard(new Board(layout));
 		hintMode = false;
-		getBoard().getSelection().clear();
-		initArrangement();
-		arrangement.arrange(getBoard());
-		view.update();
+		undoStack.clear();
+		Layout layout = LayoutProvider.getLayout(Config.getInstance().getLayout());
+		Board b = new Board(layout); 
+		getArrangement().arrange(b);
+		setBoard(b);
 	}
 
 	public void restart() {
@@ -124,9 +121,9 @@ public class BoardController {
 
 	public void loadState(FileInputStream in) throws Exception {
 		ObjectInputStream objIn = new ObjectInputStream(in);
-		setBoard( (Board)objIn.readObject() );
+		Board b = (Board)objIn.readObject();
 		undoStack = (Stack<Cell>)objIn.readObject();
-		view.update();
+		setBoard(b);
 	}
 
 	public void saveState(FileOutputStream out) throws IOException {
@@ -135,11 +132,11 @@ public class BoardController {
 		objOut.writeObject(undoStack);
 	}
 
-	private void initArrangement() {
+	private IArrangeStrategy getArrangement() {
 		if (Config.getInstance().isRandom()) {
-			arrangement = new RandomArrange();
+			return new RandomArrange();
 		} else {
-			arrangement = new SolvableArrange();
+			return new SolvableArrange();
 		}
 	}
 }
