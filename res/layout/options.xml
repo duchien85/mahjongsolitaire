@@ -16,21 +16,41 @@
       android:layout_height="wrap_content"
       android:text="Arrangement:"
     />
-
     <RadioGroup
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
       android:orientation="horizontal">
-
       <RadioButton android:id="@+id/random"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Random" />
-
       <RadioButton android:id="@+id/solvable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Solvable" />
+    </RadioGroup>
+
+    <TextView
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:text="Orientation:"
+    />
+    <RadioGroup
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal">
+      <RadioButton android:id="@+id/sensor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sensor" />
+      <RadioButton android:id="@+id/landscape"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Landscape" />
+      <RadioButton android:id="@+id/portrait"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Portrait" />
     </RadioGroup>
 
     <TextView

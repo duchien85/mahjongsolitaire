@@ -4,14 +4,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-public class MainActivity extends Activity {
+public class MainActivity extends BaseActivity {
 	private static final String STATE_FILE_NAME = "state.data";
 	
 	private BoardView boardView;
@@ -26,16 +26,9 @@ public class MainActivity extends Activity {
 
 		LayoutProvider.init(this);
 		Config.getInstance().init(this);
-		
-		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-		
         setContentView(R.layout.main);
         boardView = (BoardView)findViewById(R.id.boardView);
-	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
+        
 		File file = getFileStreamPath(STATE_FILE_NAME);
 		if (file.exists()) {
 			try {
@@ -46,7 +39,7 @@ public class MainActivity extends Activity {
 					in.close();
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				Log.e("", e.getMessage(), e);
 				boardView.getController().startNewGame();
 			}
 		}
@@ -55,17 +48,17 @@ public class MainActivity extends Activity {
 	}
 
 	@Override
-	protected void onStop() {
-		super.onStop();
+	protected void onDestroy() {
+		super.onDestroy();
 		try {
-			FileOutputStream out = openFileOutput(STATE_FILE_NAME, MODE_PRIVATE);
-			try {
-				boardView.getController().saveState(out);
-			} finally {
-				out.close();
-			}
+		FileOutputStream out = openFileOutput(STATE_FILE_NAME, MODE_PRIVATE);
+		try {
+			boardView.getController().saveState(out);
+		} finally {
+			out.close();
+		}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log.e("", e.getMessage(), e);
 		}
 	}
 

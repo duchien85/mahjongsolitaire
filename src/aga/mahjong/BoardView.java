@@ -173,7 +173,7 @@ public class BoardView extends View {
 	
 	private void drawStatus(Canvas canvas) {
 		String str = String.format("Tiles: %1$s   Pairs: %2$s", board.getTilesCount(), board.getPayersCount());
-		canvas.drawText(str, 0, screenHeight - StatusBarHeight, textPaint);
+		canvas.drawText(str, 5, screenHeight - StatusBarHeight, textPaint);
 	}	 
 
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {

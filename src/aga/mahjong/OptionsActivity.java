@@ -1,6 +1,5 @@
 package aga.mahjong;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -8,7 +7,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-public class OptionsActivity extends Activity {
+public class OptionsActivity extends BaseActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -25,6 +24,14 @@ public class OptionsActivity extends Activity {
 		else
 			((RadioButton)findViewById(R.id.solvable)).setChecked(true);
 
+		String orientation = Config.getInstance().getOrientation();
+		if (Names.ORIENTATION_LANDSCAPE.equals(orientation))
+			((RadioButton)findViewById(R.id.landscape)).setChecked(true);
+		else if (Names.ORIENTATION_PORTRAIT.equals(orientation))
+			((RadioButton)findViewById(R.id.portrait)).setChecked(true);
+		else
+			((RadioButton)findViewById(R.id.sensor)).setChecked(true);
+		
 		final Button change = (Button)findViewById(R.id.change_layout);
 		change.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -71,10 +78,22 @@ public class OptionsActivity extends Activity {
 	}
 	
 	private void accept() {
-		RadioButton rb = (RadioButton)findViewById(R.id.random);
 		Config cfg = Config.getInstance();
+		
+		RadioButton rb_landscape = ((RadioButton)findViewById(R.id.landscape));
+		RadioButton rb_portrait = ((RadioButton)findViewById(R.id.portrait));
+		if (rb_landscape.isChecked())
+			cfg.setOrientation(Names.ORIENTATION_LANDSCAPE);
+		else if (rb_portrait.isChecked())
+			cfg.setOrientation(Names.ORIENTATION_PORTRAIT);
+		else
+			cfg.setOrientation(Names.ORIENTATION_SENSOR);
+		
+		RadioButton rb = (RadioButton)findViewById(R.id.random);
 		cfg.setIsRandom(rb.isChecked());
+		
 		cfg.setLayout(getLayoutName().getText().toString());
+		
 		cfg.save();
 		setResult(1);
 		finish();
