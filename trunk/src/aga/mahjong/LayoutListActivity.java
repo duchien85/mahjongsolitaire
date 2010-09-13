@@ -2,6 +2,7 @@ package aga.mahjong;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -35,5 +36,16 @@ public class LayoutListActivity extends ListActivity {
 		setResult(0, intent);
 		finish();
 	}
-
+    
+	@Override
+	protected void onResume() {
+		super.onResume();
+		String str = Config.getInstance().getOrientation();
+		if (Names.ORIENTATION_LANDSCAPE.equals(str))
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+		else if (Names.ORIENTATION_PORTRAIT.equals(str))
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		else
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+	}
 }
